@@ -32,11 +32,28 @@ jobs:
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
       
+      # Create settings.xml file with Nexus credentials
+      - name: Create Maven Settings
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          cat > ~/.m2/settings.xml << EOF
+          <settings>
+            <servers>
+              <server>
+                <id>nexus</id>
+                <username>${{ secrets.NEXUS_USERNAME }}</username>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+          echo "Created Maven settings file with Nexus credentials"
+      
       # Deploy to Nexus repository only on push to master branch
       - name: Deploy to Nexus
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "Deploying to Nexus repository..."
-          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://172.16.231.151:8081/repository/maven-snapshots/ -Drepository.username=${{ secrets.NEXUS_USERNAME }} -Drepository.password=${{ secrets.NEXUS_PASSWORD }}
+          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::http://172.16.231.151:8081/repository/maven-snapshots/
         timeout-minutes: 5
         continue-on-error: true
