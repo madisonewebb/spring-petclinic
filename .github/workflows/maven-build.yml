@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         java: [ '17' ]
@@ -25,5 +25,14 @@ jobs:
           java-version: ${{matrix.java}}
           distribution: 'adopt'
           cache: maven
+          server-id: nexus-releases
+          server-username: ${{ secrets.NEXUS_USERNAME }}
+          server-password: ${{ secrets.NEXUS_PASSWORD }}
+      
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
+      
+      # Deploy to Nexus repository only on push to master branch
+      - name: Deploy to Nexus
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://72.16.231.151:8081/repository/maven-releases/
