@@ -35,6 +35,6 @@ jobs:
       # Deploy to Nexus repository only on push to master branch
       - name: Deploy to Nexus
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://72.16.231.151:8081/repository/maven-snapshots/
+        run: ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://172.16.231.151:8081/repository/maven-snapshots/
         timeout-minutes: 5
         continue-on-error: true
