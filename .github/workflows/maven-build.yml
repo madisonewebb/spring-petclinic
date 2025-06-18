@@ -32,7 +32,7 @@ jobs:
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
       
-      # Create settings.xml file with Nexus credentials
+      # Create settings.xml file with both Nexus credentials
       - name: Create Maven Settings
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
@@ -44,16 +44,30 @@ jobs:
                 <username>${{ secrets.NEXUS_USERNAME }}</username>
                 <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
+              <server>
+                <id>colleague-nexus</id>
+                <username>${{ secrets.COLLEAGUE_NEXUS_USERNAME }}</username>
+                <password>${{ secrets.COLLEAGUE_NEXUS_PASSWORD }}</password>
+              </server>
             </servers>
           </settings>
           EOF
-          echo "Created Maven settings file with Nexus credentials"
+          echo "Created Maven settings file with all Nexus credentials"
       
-      # Deploy to Nexus repository only on push to master branch
+      # Deploy to your Nexus repository
       - name: Deploy to Nexus
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "Deploying to Nexus repository..."
           ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::http://172.16.231.151:8081/repository/maven-snapshots/
+        timeout-minutes: 5
+        continue-on-error: true
+      
+      # Deploy to colleague's Nexus repository
+      - name: Deploy to Colleague's Nexus
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          echo "Deploying to colleague's Nexus repository..."
+          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=colleague-nexus::http://COLLEAGUE_NEXUS_URL:8081/repository/maven-snapshots/
         timeout-minutes: 5
         continue-on-error: true
