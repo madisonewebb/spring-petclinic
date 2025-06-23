@@ -59,7 +59,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "Deploying to Nexus repository..."
-          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::nexus:8081/repository/maven-snapshots/
+          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-snapshots/
         timeout-minutes: 5
         continue-on-error: true
       
