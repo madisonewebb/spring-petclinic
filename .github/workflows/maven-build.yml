@@ -59,15 +59,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "Deploying to Nexus repository..."
-          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::http://172.16.231.151:8081/repository/maven-snapshots/
+          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::nexus:8081/repository/maven-snapshots/
         timeout-minutes: 5
         continue-on-error: true
       
-      # Deploy to colleague's Nexus repository
-      - name: Deploy to Colleague's Nexus
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          echo "Deploying to colleague's Nexus repository..."
-          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=colleague-nexus::https://860f-2603-3006-0-7500-10a3-82f6-7174-5ec7.ngrok-free.app:/repository/maven-snapshots/
-        timeout-minutes: 5
-        continue-on-error: true
