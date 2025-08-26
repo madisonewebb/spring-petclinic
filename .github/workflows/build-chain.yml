@@ -18,7 +18,7 @@ jobs:
       - name: Run Build Chain
         uses: kiegroup/github-action-build-chain@v3.5.9
         with:
-          definition-file: ".github/workflows/build-chain.yml"   # <- make sure your file is here
+          definition-file: "../.ci/buildchain-config.yaml"  # <- make sure your file is here
           flow-type: "branch"
           starting-project: "madisonewebb/spring-petclinic"
           logger-level: "debug"
