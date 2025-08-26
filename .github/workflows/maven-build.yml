@@ -54,6 +54,6 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "Deploying to Nexus repository..."
-          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::default::https://4a9aafd9d34d.ngrok-free.app/repository/maven-releases/
+          ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::https://4a9aafd9d34d.ngrok-free.app/repository/maven-releases/
         continue-on-error: true
       
