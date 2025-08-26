@@ -71,14 +71,14 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: kiegroup/github-action-build-chain@v3.5.9
         with:
-          definition-file: .ci/build-chain.yaml
+          definition-file: https://raw.githubusercontent.com/madisonewebb/spring-petclinic/master/.ci/build-chain.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Build Chain (branch)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: kiegroup/github-action-build-chain@v3.5.9
         with:
-          definition-file: .ci/build-chain.yaml
+          definition-file: https://raw.githubusercontent.com/madisonewebb/spring-petclinic/master/.ci/build-chain.yaml
           flow-type: branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
