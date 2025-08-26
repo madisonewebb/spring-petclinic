@@ -1,0 +1,17 @@
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sanity: can we see both repos with PAT?
+        env:
+          PAT: ${{ secrets.GH_CLONE_TOKEN }}
+        run: |
+          for R in madisonewebb/spring-petclinic madisonewebb/joda-time; do
+            git -c http.extraHeader="Authorization: Basic $(printf '%s' x-access-token:$PAT | base64 -w0)" \
+                ls-remote --heads https://github.com/$R.git | sed -n 's/.*refs\/heads\///p'
+          done
