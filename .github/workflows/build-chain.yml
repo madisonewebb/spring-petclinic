@@ -9,6 +9,8 @@ jobs:
   build-chain:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
       - name: Run Build Chain
         uses: kiegroup/github-action-build-chain@v3.5.9
         with:
