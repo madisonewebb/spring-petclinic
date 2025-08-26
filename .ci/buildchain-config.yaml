@@ -5,6 +5,15 @@ dependencies:
   - project: madisonewebb/spring-petclinic
     dependencies:
       - project: madisonewebb/joda-time
+    mapping:
+      dependencies:
+        default:
+          - source: master
+            target: main
+      dependant:
+        default:
+          - source: main
+            target: master
 
 default:
   build-command:
