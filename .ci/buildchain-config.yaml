@@ -1,0 +1,15 @@
+version: "2.2"
+
+dependencies:
+  projects:
+    - project: madisonewebb/joda-time
+    - project: madisonewebb/spring-petclinic
+      dependencies:
+        - project: madisonewebb/joda-time
+
+default:
+  build-command:
+    # "current" = when this repo is the one being built directly
+    current: mvn -B -U -DskipTests -s .github/maven-settings.xml deploy
+    # "upstream" = when this repo is a dependency of another
+    upstream: mvn -B -U -DskipTests -s .github/maven-settings.xml install
