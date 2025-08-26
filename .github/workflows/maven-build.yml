@@ -56,4 +56,35 @@ jobs:
           echo "Deploying to Nexus repository..."
           ./mvnw -B deploy -DskipTests -DaltDeploymentRepository=nexus::https://4a9aafd9d34d.ngrok-free.app/repository/maven-releases/
         continue-on-error: true
-      
+
+  build-chain:
+    name: Cross-repo Build Chain
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      # NOTE: Do NOT add actions/checkout here. The build-chain action manages checkouts itself.
+      - name: Run Build Chain (PR)
+        if: github.event_name == 'pull_request'
+        uses: kiegroup/github-action-build-chain@v3.5.9
+        with:
+          definition-file: .ci/build-chain.yaml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Build Chain (branch)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: kiegroup/github-action-build-chain@v3.5.9
+        with:
+          definition-file: .ci/build-chain.yaml
+          flow-type: branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Challenge: Create GitHub Action jobs to build dependent artifacts when the artifacts
+# they depend on are built successfully. (on successful artifact build of joda-time, the
+# spring-petclinic should get built as well)
