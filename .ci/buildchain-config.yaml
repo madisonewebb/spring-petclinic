@@ -1,11 +1,10 @@
 version: "2.2"
 
 dependencies:
-  projects:
-    - project: madisonewebb/joda-time
-    - project: madisonewebb/spring-petclinic
-      dependencies:
-        - project: madisonewebb/joda-time
+  - project: madisonewebb/joda-time
+  - project: madisonewebb/spring-petclinic
+    dependencies:
+      - project: madisonewebb/joda-time
 
 default:
   build-command:
