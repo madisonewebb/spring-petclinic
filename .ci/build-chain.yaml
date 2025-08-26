@@ -14,7 +14,7 @@ dependencies:
     mapping:
       dependant:
         default:
-          - source: main
+          - source: ^.*$
             target: master
   - project: madisonewebb/spring-petclinic
     dependencies:
@@ -22,7 +22,7 @@ dependencies:
     mapping:
       dependencies:
         default:
-          - source: master
+          - source: ^.*$
             target: main
 
 # Default build command for the current project. Adjust as needed.
