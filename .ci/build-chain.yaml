@@ -11,9 +11,19 @@ version: "2.2"
 dependencies:
   - project: madisonewebb/joda-time
     dependencies: []
+    mapping:
+      dependant:
+        default:
+          - source: main
+            target: master
   - project: madisonewebb/spring-petclinic
     dependencies:
       - project: madisonewebb/joda-time
+    mapping:
+      dependencies:
+        default:
+          - source: master
+            target: main
 
 # Default build command for the current project. Adjust as needed.
 default:
