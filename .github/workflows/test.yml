@@ -1,3 +1,12 @@
+name: PAT branch visibility test
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ master ]
+    paths:
+      - '.github/workflows/test.yml'
+
 permissions:
   contents: read
 
@@ -7,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sanity: can we see both repos with PAT?
+      - name: can we see both repos with PAT?
         env:
           PAT: ${{ secrets.GH_CLONE_TOKEN }}
         run: |
