@@ -3,18 +3,24 @@ version: "2.2"
 dependencies:
   - project: madisonewebb/joda-time
     mapping:
+      # When building joda-time as the DEPENDANT (reverse builds),
+      # align joda-time's main to petclinic's master
       dependant:
         default:
-          - source: master
-            target: main
+          - source: main
+            target: master
+
   - project: madisonewebb/spring-petclinic
     dependencies:
       - project: madisonewebb/joda-time
     mapping:
+      # When building petclinic (dependant) against its dependency (joda-time),
+      # align petclinic's master to joda-time's main
       dependencies:
         default:
           - source: master
             target: main
+      # Optional: only needed if you trigger reverse builds from petclinic side
       dependant:
         default:
           - source: main
@@ -22,7 +28,5 @@ dependencies:
 
 default:
   build-command:
-    # "current" = when this repo is the one being built directly
     current: mvn -B -U -DskipTests -s .github/maven-settings.xml deploy
-    # "upstream" = when this repo is a dependency of another
     upstream: mvn -B -U -DskipTests -s .github/maven-settings.xml install
